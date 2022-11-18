@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="container" style="width: 1200px">
+        <form>
+            <label>Значение А:</label>
+                <input type="number" id='1' size="40">
+            <label>Значение B:</label>
+                <input type="number" id='2' size="40">
+            <button type="button" id="add"> Addition</button>
+            <button type="button" id="sub"> Substruction</button>
+            <button type="button" id="mult"> Multiply</button>
+            <button type="button" id="div"> Division</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(()=>{
+            function operation(operation) {
+                const firstNumber = $('#1').val();
+                const secondNumber = $('#2').val();
+                const urlAdd = new URL('http://localhost:8000/add/');
+                const urlSub = new URL('http://localhost:8000/substract/');
+                const urlMult = new URL('http://localhost:8000/multiply/');
+                const urlDiv = new URL('http://localhost:8000/divide/');
+                let url = '';
+                if(operation === 'add') {
+                    url = urlAdd;
+                } else if(operation === 'sub') {
+                    url = urlSub;
+                } else if(operation === 'mult') {
+                    url = urlMult;
+                } else {
+                    url = urlDiv
+                }
+                $.ajax({
+                    method: 'get',
+                    url: `${url}`,
+                    data: {
+                        A: `${firstNumber}`,
+                        B: `${secondNumber}`
+                    },
+                    success: function(response) {
+                        console.log(response.result)
+                        const result = $('#result');
+                        const content = `<p style="color: green"> Result: ${response.result}</p>`
+                        result.html(content);
+                    },
+                    error: function(error){
+                        const result = $('#result');
+                        const content = `<p style="color: red"> Error: ${error.responseJSON.error}</p>`
+                        result.html(content);
+                      }
+                });
+            }
+            $('#add').on('click', ()=> operation('add'));
+            $('#sub').on('click', ()=> operation('sub'));
+            $('#mult').on('click', ()=> operation('mult'));
+            $('#div').on('click', ()=> operation('div'));
+        })
+    </script>
+</body>
+</html>
