@@ -3,8 +3,6 @@ from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
 from datetime import datetime
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.shortcuts import render
-# from django.core.serializers import serialize
-# from django.shortcuts import get_object_or_404
 
 
 def index(request, *args, **kwargs):
